@@ -2,12 +2,12 @@
 
 
 #include "RTS_Controller.h"
-#include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
 
 ARTS_Controller::ARTS_Controller()
 {
 	bReplicates = false;
+	bEnableClickEvents = true;
+	bShowMouseCursor = true;
 }
 
 void ARTS_Controller::BeginPlay()
