@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "InputCoreTypes.h"
 #include "Worker.generated.h"
 
 UCLASS()
@@ -17,6 +18,9 @@ class RTS_API AWorker : public ACharacter
 	UPROPERTY(EditDefaultsOnly, Category="Animation", meta=(AllowPrivateAccess="true"))
 	UAnimMontage* IntroMontage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Materails", meta=(AllowPrivateAccess="true"))
+	UDecalComponent* Decal;
+	
 public:
 	// Sets default values for this character's properties
 	AWorker();
@@ -32,4 +36,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+	void HandleActorClicked() const;
 };

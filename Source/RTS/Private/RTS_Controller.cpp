@@ -5,7 +5,6 @@
 
 ARTS_Controller::ARTS_Controller()
 {
-	bReplicates = false;
 	bEnableClickEvents = true;
 	bShowMouseCursor = true;
 }
