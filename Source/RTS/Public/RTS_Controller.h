@@ -17,6 +17,8 @@ class RTS_API ARTS_Controller : public APlayerController
 public:
 	ARTS_Controller();
 
+	FVector GetMouseLocation() const;
+
 protected:
 	virtual void BeginPlay() override;
 	

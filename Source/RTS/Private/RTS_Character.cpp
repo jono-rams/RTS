@@ -5,11 +5,13 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "RTS_Controller.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "Interafaces/Command.h"
 
 // Sets default values
 ARTS_Character::ARTS_Character() :
@@ -70,6 +72,34 @@ void ARTS_Character::ResetZoom(const FInputActionValue& InputActionValue)
 	UpdateCameraRelativeLocation(DefaultCameraLocation);
 }
 
+void ARTS_Character::HandleRightClick(const FInputActionValue& InputActionValue)
+{
+	if (Units.IsEmpty()) return;
+	
+	const FVector MouseLocation = Cast<ARTS_Controller>(GetController())->GetMouseLocation();
+	for (const auto& Unit : Units)
+	{
+		if (const ICommand* CommandInterface = Cast<ICommand>(Unit))
+		{
+			CommandInterface->Execute_MoveUnit(Unit, MouseLocation);
+		}
+	}
+}
+
+void ARTS_Character::HandleLeftClick(const FInputActionValue& InputActionValue)
+{
+	if (Units.IsEmpty()) return;
+
+	for (const auto& Unit : Units)
+	{
+		if (const ICommand* CommandInterface = Cast<ICommand>(Unit))
+		{
+			CommandInterface->Execute_RemoveDecal(Unit);
+		}
+	}
+	Units.Empty();
+}
+
 void ARTS_Character::RotateX(const float MouseX)
 {
 	if (!CanRotate()) return;
@@ -118,6 +148,8 @@ void ARTS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ARTS_Character::Move);
 		EnhancedInputComponent->BindAction(ScrollAction, ETriggerEvent::Triggered, this, &ARTS_Character::Scroll);
 		EnhancedInputComponent->BindAction(ResetZoomAction, ETriggerEvent::Completed, this, &ARTS_Character::ResetZoom);
+		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &ARTS_Character::HandleRightClick);
+		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Triggered, this, &ARTS_Character::HandleLeftClick);
 	}
 }
 

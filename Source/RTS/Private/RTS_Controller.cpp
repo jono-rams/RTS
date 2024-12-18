@@ -9,6 +9,13 @@ ARTS_Controller::ARTS_Controller()
 	bShowMouseCursor = true;
 }
 
+FVector ARTS_Controller::GetMouseLocation() const
+{
+	FHitResult HitResult;
+	GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, HitResult);
+	return HitResult.Location;
+}
+
 void ARTS_Controller::BeginPlay()
 {
 	Super::BeginPlay();

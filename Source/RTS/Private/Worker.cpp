@@ -3,8 +3,10 @@
 
 #include "Worker.h"
 
+#include "RTS_Character.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/DecalComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AWorker::AWorker()
@@ -47,9 +49,20 @@ void AWorker::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AWorker::HandleActorClicked() const
+void AWorker::HandleActorClicked()
 {
 	Decal->SetVisibility(true);
+	Cast<ARTS_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->AddUnit(this);
+}
+
+void AWorker::MoveUnit_Implementation(const FVector Location)
+{
+	
+}
+
+void AWorker::RemoveDecal_Implementation()
+{
+	Decal->SetVisibility(false);
 }
 
 

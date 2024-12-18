@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputCoreTypes.h"
+#include "Interafaces/Command.h"
 #include "Worker.generated.h"
 
 UCLASS()
-class RTS_API AWorker : public ACharacter
+class RTS_API AWorker : public ACharacter, public ICommand
 {
 	GENERATED_BODY()
 
@@ -37,5 +38,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	void HandleActorClicked() const;
+	void HandleActorClicked();
+
+	virtual void MoveUnit_Implementation(const FVector Location) override;
+	virtual void RemoveDecal_Implementation() override;
 };

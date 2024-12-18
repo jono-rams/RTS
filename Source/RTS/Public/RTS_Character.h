@@ -58,6 +58,15 @@ class RTS_API ARTS_Character : public ACharacter
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> ResetZoomAction;
 
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> RightClickAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> LeftClickAction;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Gameplay", meta = (AllowPrivateAccess = "true"))
+	TArray<AActor*> Units;
+
 public:
 	// Sets default values for this character's properties
 	ARTS_Character();
@@ -73,6 +82,10 @@ protected:
 	void Scroll(const FInputActionValue& InputActionValue);
 
 	void ResetZoom(const FInputActionValue& InputActionValue);
+
+	void HandleRightClick(const FInputActionValue& InputActionValue);
+
+	void HandleLeftClick(const FInputActionValue& InputActionValue);
 
 	UFUNCTION(BlueprintCallable)
 	void RotateX(float MouseX);
@@ -90,4 +103,9 @@ private:
 	void UpdateCameraRelativeLocation(const FVector& NewLocation) const;
 
 	FORCEINLINE bool CanRotate() const;
+
+public:
+	FORCEINLINE TArray<AActor*> GetUnits() const { return Units; }
+	FORCEINLINE AActor* GetUnitByIndex(const int Index) const { return Units[Index]; }
+	FORCEINLINE void AddUnit(AActor* Unit) { Units.AddUnique(Unit); }
 };
