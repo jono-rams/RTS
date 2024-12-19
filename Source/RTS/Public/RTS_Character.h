@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Enums/TimeState.h"
 #include "GameFramework/Character.h"
 #include "RTS_Character.generated.h"
 
@@ -92,6 +93,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void RotateY(float MouseY);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateTimeState(ETimeState CurrentTimeState);
 
 public:	
 	// Called every frame

@@ -6,12 +6,14 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "RTS_Controller.h"
+#include "RTS_LevelScriptActor.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Interafaces/Command.h"
+#include "Nodes/InterchangeBaseNode.h"
 
 // Sets default values
 ARTS_Character::ARTS_Character() :
@@ -120,11 +122,19 @@ void ARTS_Character::RotateY(const float MouseY)
 	CameraBoom->AddLocalRotation(FRotator(Value, 0.f, 0.f));
 }
 
+void ARTS_Character::UpdateTimeState(ETimeState CurrentTimeState)
+{
+	if (const auto LevelScriptActor = Cast<ARTS_LevelScriptActor>(GetWorld()->GetLevelScriptActor()))
+	{
+		if (const auto TimeInterface = Cast<ITime>(LevelScriptActor))
+			TimeInterface->Execute_ChangeTimeState(LevelScriptActor, CurrentTimeState);
+	}	
+}
+
 // Called every frame
 void ARTS_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -149,7 +159,7 @@ void ARTS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(ScrollAction, ETriggerEvent::Triggered, this, &ARTS_Character::Scroll);
 		EnhancedInputComponent->BindAction(ResetZoomAction, ETriggerEvent::Completed, this, &ARTS_Character::ResetZoom);
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &ARTS_Character::HandleRightClick);
-		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Triggered, this, &ARTS_Character::HandleLeftClick);
+		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Completed, this, &ARTS_Character::HandleLeftClick);
 	}
 }
 
